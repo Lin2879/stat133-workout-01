@@ -32,18 +32,18 @@ The Golden State Warriors scored an average of 121.6 points in this year's grand
 ####The overall statistics
 
 ```{r}
-summarize(group_by(dat, team_name), two_points_perc_made = sum(shot_made_flag == 'shot_yes' & shot_type == '2PT Field Goal') / sum(shot_type == '2PT Field Goal'), three_points_perc_made = sum(shot_made_flag == 'shot_yes' & shot_type == '3PT Field Goal') / sum(shot_type == '3PT Field Goal'))
+table = summarize(group_by(dat, team_name), two_points_perc_made = sum(shot_made_flag == 'shot_yes' & shot_type == '2PT Field Goal') / sum(shot_type == '2PT Field Goal'), three_points_perc_made = sum(shot_made_flag == 'shot_yes' & shot_type == '3PT Field Goal') / sum(shot_type == '3PT Field Goal'))
+knitr::kable(table, caption = "The over all effective shooting percentage of the Golden State Warriors")
 ```
->The over all effective shooting percentage of the Golden State Warriors
 
 ```{r}
 SP_TEAM = select(dat,shot_type, shot_made_flag, opponent)%>%
        group_by(opponent)%>%
        summarize(two_points = sum(shot_type == '2PT Field Goal'), two_points_made = sum(shot_made_flag == 'shot_yes' & shot_type == '2PT Field Goal'), three_points = sum(shot_type == '3PT Field Goal'), three_points_made = sum(shot_made_flag == 'shot_yes' & shot_type == '3PT Field Goal'))%>%
        mutate(two_points_perc_made = (two_points_made / two_points) * 100, three_points_perc_made = (three_points_made / three_points) * 100)
-SP_TEAM[, c(1, 2, 3, 6, 4, 5, 7)]
+SP_TEAM = SP_TEAM[, c(1, 2, 3, 6, 4, 5, 7)]
+knitr::kable(SP_TEAM, caption = "The effective shooting percentage of the Golden State Warriors against other teams")
 ```
->The effective shooting percentage of the Golden State Warriors against other teams
 
 In the 2016-2017 season, the Golden State Warriors have a 55.3% effective 2pt-field-goal percentage, higher than all other teams in the entire season. More impressivel, their effective 2pt-field-goal percentage goes up to nearly 65% when facing teams including the Indiana Pacers and the Dallas Mavericks, which guarantees the victories against these teams.
 
@@ -65,9 +65,8 @@ SP_2 = select(dat, name, shot_type, shot_made_flag)%>%
        group_by(name)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_2
+knitr::kable(SP_2, caption = "2PT effective shooting percentage by player")
 ```
->2PT effective shooting percentage by player
 
 ```{r}
 SP_3 = select(dat, name, shot_type, shot_made_flag)%>%
@@ -75,18 +74,16 @@ SP_3 = select(dat, name, shot_type, shot_made_flag)%>%
        group_by(name)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_3
+knitr::kable(SP_3, caption = "3PT effective shooting percentage by player")
 ```
->3PT effective shooting percentage by player
 
 ```{r}
 SP_ALL = select(dat, name, shot_type, shot_made_flag)%>%
        group_by(name)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Effective shooting percentage by playere")
 ```
->Effective shooting percentage by player
 
 ```{r out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('../images/kevin durant.jpg')
@@ -94,17 +91,12 @@ knitr::include_graphics('../images/kevin durant.jpg')
 
 The participation of Kevin Durant surely plays a significant role in the Golden State Warriors gret success. In the entire season, Durant achieved an average of 54.1% effective field-goal percentage, the highest among all Golden State Warriors' players. Durant also hits pull-up 3-pointer late in Game 3 of The Finals, helping the team finish off the Cavaliers.
 
-```{r out.width='80%', echo = FALSE, fig.align='center'}
-knitr::include_graphics('../images/kevin durant.jpg')
-```
-
 ```{r}
 SP_ALL = select(filter(dat, name == 'Kevin Durant'), name, shot_type, shot_made_flag)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Kevin Durant's effective field-goal percentage")
 ```
->Kevin Durant's effective field-goal percentage
 
 ```{r out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('../images/stephen curry.jpg')
@@ -116,9 +108,8 @@ Stephen Curry continued his astonishing performance in the 2016-2017 season. Des
 SP_ALL = select(filter(dat, name == 'Stephen Curry'), name, shot_type, shot_made_flag)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Stephen Curry's effective field-goal percentage")
 ```
->Stephen Curry's effective field-goal percentage
 
 ```{r out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('../images/draymond green.jpg')
@@ -130,9 +121,8 @@ Despite his effective field-gold percentage being the lowest of the team, Draymo
 SP_ALL = select(filter(dat, name == 'Draymond Green'), name, shot_type, shot_made_flag)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Draymond Green's effective field-goal percentage")
 ```
->Draymond Green's effective field-goal percentage
 
 ```{r out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('../images/klay thompson.jpg')
@@ -144,9 +134,8 @@ Klay Thompson scored the highest effective 3-point-field-goal percentage during 
 SP_ALL = select(filter(dat, name == 'Klay Thomspon'), name, shot_type, shot_made_flag)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Klay Thompson's effective field-goal percentage")
 ```
->Klay Thompson's effective field-goal percentage
 
 ```{r out.width='80%', echo = FALSE, fig.align='center'}
 knitr::include_graphics('../images/andre iguodala.jpg')
@@ -158,9 +147,8 @@ Comparing to his teammates, Andre Iguodala is less famous and arouse less attent
 SP_ALL = select(filter(dat, name == 'Andre Iguodala'), name, shot_type, shot_made_flag)%>%
        summarize(total = length(shot_type), made = length(shot_made_flag[shot_made_flag == 'shot_yes']))%>%
        mutate(perc_made = (made / total) * 100)
-SP_ALL
+knitr::kable(SP_ALL, caption = "Andre Iguodala's effective field-goal percentage")
 ```
->Andre Iguodala's effective field-goal percentage
 
 ####Conclusions
 In the 2016-2017 season, the Golden State Warriors performed aggresively, scoring the most points among all NBA teams. In the entire season, the excellence of the entire team produced two Assist of the years and the Performance of the year. We have reasons to believe that the team will continue to dominate the fields and score more points in the next season.
